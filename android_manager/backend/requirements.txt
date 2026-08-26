@@ -1,0 +1,14 @@
+# android_manager/backend/requirements.txt
+
+# 基础依赖
+fastapi
+uvicorn[standard]
+python-multipart # 用于文件上传/form data
+sqlalchemy
+pydantic
+alembic # 用于数据库迁移
+gunicorn # 生产环境进程管理工具
+
+# 实时通信依赖
+websockets
+python-jose[cryptography] # 如果需要JWT进行认证
