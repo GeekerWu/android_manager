@@ -1,5 +1,6 @@
 # android_manager/backend/main.py
 from fastapi import FastAPI, Depends, HTTPException, status, Request
+from fastapi.middleware.cors import CORSMiddleware # 1. 导入 CORS 中间件
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
@@ -22,6 +23,24 @@ from security import (
 # 1. 初始化与中间件设置 (Middleware)
 # =================================================================
 app = FastAPI(title="Android Manager API", description="机器人状态监控与控制API")
+
+# 3. 配置 CORS 中间件 (关键步骤)
+# ⚠️ 注意：'http://localhost:8088' 必须是您的前端应用实际运行的地址。
+# 如果您未来更换了前端开发端口，请记得更新这里。
+origins = [
+    # "http://localhost:8088",  # 允许您的前端应用访问
+    # 如果您在开发或测试时，需要允许所有来源，可以使用 "*"
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          # 允许的来源列表
+    allow_credentials=True,         # 允许携带 Cookie 和认证凭证
+    allow_methods=["*"],            # 允许所有 HTTP 方法 (GET, POST, PUT, DELETE...)
+    allow_headers=["*"],            # 允许所有 HTTP Header
+)
+
 
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
@@ -99,6 +118,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     """
     模拟用户登录。接收用户名和密码，验证凭证，成功后生成 JWT。
     """
+    print(f"🔑 登录尝试：用户名={form_data.username,} 密码={form_data.password}")
     # 1. 使用后端定义的函数进行用户凭证校验
     credentials = get_user_credentials(form_data.username, form_data.password)
 

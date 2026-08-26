@@ -1,56 +1,62 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/components/HelloWorld.vue'; // 假设首页使用这个组件
-import Login from '@/components/Login.vue'; // 我们刚刚创建的登录组件
+import DashBoard from '@/components/DashBoard.vue';
+import Login from '@/components/login/Login.vue';
+import NotFoundComponent from '@/components/NotFound.vue';
+// 🌟 关键：直接导入 Pinia 的 Store Hook
+import { useAuthStore } from '@/store/auth';
+import { computed } from 'vue';
 
-// --- 模拟认证状态检查 ---
-// 这是一个简化的模拟函数，实际项目中应依赖Pinia/Vuex
-const checkAuthStatus = () => {
-  // 检查 LocalStorage 或全局 store 中是否有有效的 Token
-  const token = localStorage.getItem('authToken');
-  return !!token; // 存在 Token 即视为已登录
-};
-
-// --- 创建路由历史和实例 ---
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home,
-    meta: { requiresAuth: false} // 首页需要认证
+    path: '/dashboard',
+    name: 'DashBoard',
+    component: DashBoard,
+    meta: { requiresAuth: true } // 首页需要认证
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login, // 新添加的登录组件
+    component: Login, // 登录页不需要认证
     meta: { requiresAuth: false } // 登录页不需要认证
   },
-  // ... 其他路由
+  // 增加一个匹配所有路径的 404 兜底路由
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFoundComponent,
+    meta: { requiresAuth: false }
+  }
 ];
 
-// --- 创建路由实例 ---
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes: routes
 });
 
-// --- 核心逻辑：全局前置守卫 (Router Guard) ---
-router.beforeEach((to, from, next) => {
+// --- 🚀 核心逻辑：全局前置守卫 (Router Guard) ---
+router.beforeEach((to, from) => {
+  // 1. 状态获取：使用 useAuthStore() 访问 Store，确保获取的是当前上下文的 Store 实例。
+  const store = useAuthStore();
+  // 🌟 修复：使用 Store 定义的 getter 属性 isAuthenticated 来获取认证状态。
+  const isAuthenticated = computed(() => store.isAuthenticated);
+
   const requiresAuth = to.meta.requiresAuth;
-  const isAuthenticated = checkAuthStatus();
 
-  // 1. 检查是否需要认证
-  if (requiresAuth && !isAuthenticated) {
-    // 未认证，并且目标页面需要认证 -> 重定向到登录页
-    console.warn('未登录用户尝试访问受保护路由，重定向到 /login');
-    next({ name: 'Login' });
-  } else if (to.name === 'Login' && isAuthenticated) {
-    // 用户已经登录，但尝试访问登录页 -> 重定向到首页
-    console.info('已登录用户访问登录页，重定向到主页');
-    next({ name: 'Home' });
-  } else {
-    // 否则，正常前进
-    next();
+  // 2. 权限守卫：检查是否需要认证
+  if (requiresAuth && !isAuthenticated.value) {
+    console.warn(`[Router Guard] 访问 "${to.path}" 需要认证，但未认证。重定向到 /login 组件，原始目标: ${encodeURIComponent(to.fullPath)}`);
+    // 🚨 修复：根据业务要求，未认证用户重定向到 /login 组件，并携带原始目标路径。
+    return { path: '/login', query: { redirect: to.fullPath } };
   }
+
+  // 3. 保护登录页：如果已认证，则禁止访问 /login
+  if (to.path === '/login' && isAuthenticated.value) {
+    console.warn(`[Router Guard] 用户已认证，禁止访问 /login。重定向到 /dashboard。`);
+    return { path: '/dashboard', query: { is_authenticated: 'true', redirect: to.fullPath } };
+  }
+
+  // 认证成功或不需要认证，允许通过。
+  return true;
 });
 
-export default router;
+export { router };
