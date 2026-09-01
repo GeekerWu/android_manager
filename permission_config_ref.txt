@@ -1,0 +1,178 @@
+cat > .claude/settings.local.json << 'EOF'
+{
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep",
+      "TodoWrite",
+      "WebSearch",
+      "WebFetch",
+      "Bash(gh *)",
+      "Bash(git *)",
+      "Bash(find *)",
+      "Bash(rg *)",
+      "Bash(grep *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(tree *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(echo *)",
+      "Bash(pwd)",
+      "Bash(which *)",
+      "Bash(wc *)",
+      "Bash(diff *)",
+      "Bash(sort *)",
+      "Bash(uniq *)",
+      "Bash(stat *)",
+      "Bash(file *)",
+      "Bash(du *)",
+      "Bash(df *)",
+      "Bash(jq *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(cp *)",
+      "Bash(pytest *)",
+      "Bash(ruff *)",
+      "Bash(black *)",
+      "Bash(prettier *)",
+      "Bash(eslint *)",
+      "Bash(mypy *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(pip install *)"
+    ],
+    "ask": [
+      "Bash(git reset --hard *)",
+      "Bash(rm *)",
+      "Bash(mv *)",
+      "Bash(chmod *)",
+      "Bash(chown *)",
+      "Bash(npm install *)",
+      "Bash(gh repo delete *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh release *)"
+    ],
+    "deny": [
+      "Bash(sudo *)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(git push --force*)",
+      "Bash(git push *--force*)",
+      "Bash(git push *-f)",
+      "Bash(git push *-f *)",
+      "Bash(dd *)",
+      "Bash(mkfs *)",
+      "Read(.env)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/secrets/**)",
+      "Read(**/*credentials*)"
+    ],
+    "defaultMode": "default"
+  }
+}
+EOF
+若你更习惯用编辑器，则只复制上面 cat ... EOF 之间从 { 到 } 的 JSON 部分，粘进 .claude/settings.local.json 保存即可。
+关于冗余项的说明（不影响使用）： ls、cat、echo、pwd、head、tail、grep、find、wc、which、diff、stat、du 等属于 Claude Code 内置识别的「只读命令」，在任何模式下本就不弹窗直接运行；内置 Read/Glob/Grep 工具同理也不需要批准。把它们写进 allow 不会出错，只是大多冗余，这里保留是为了让规则一目了然。tree、file、df、jq 不在内置只读集合里，放进 allow 才是真正有意义的。
+五、配置文件 · 带注释版（仅供理解，请勿直接使用）
+⚠️ 重要： 标准 JSON 不支持注释，下面这份无法被 Claude Code 直接解析。它仅用于理解每条规则的作用——真正部署请用第四节的无注释版。
+{
+  "permissions": {
+    // ===== allow：放行，不询问，直接执行 =====
+    "allow": [
+      // — 内置工具 —
+      "Edit",                 // 修改已有文件
+      "Write",                // 新建或覆盖文件
+      "Read",                 // 读取文件内容（只读工具，本就无需批准，列此为显式）
+      "Glob",                 // 按文件名模式查找（只读工具，本就无需批准）
+      "Grep",                 // 按内容搜索代码（只读工具，本就无需批准）
+      "TodoWrite",            // 维护 Claude 内部任务清单，零风险
+      "WebSearch",            // 联网搜索，只读
+      "WebFetch",             // 抓取指定网页内容，只读
+
+      // — 版本控制与协作 —
+      "Bash(gh *)",           // GitHub CLI 全部子命令（开 PR、查 issue 等）
+      "Bash(git *)",          // 所有 git 操作，含 push（常见强推写法已被下方 deny 拦下）
+
+      // — 文件查找（多为内置只读命令，列此为显式，运行时本不弹窗）—
+      "Bash(find *)",         // 按条件遍历目录找文件（注意：find -exec / -delete 仍会弹窗，不被此规则覆盖）
+      "Bash(rg *)",           // ripgrep 高速全文搜索
+      "Bash(grep *)",         // 经典文本匹配
+      "Bash(ls *)",           // 列目录
+      "Bash(cat *)",          // 输出整个文件
+      "Bash(tree *)",         // 树状展示目录结构
+      "Bash(head *)",         // 看文件开头
+      "Bash(tail *)",         // 看文件结尾
+
+      // — 只读检查（多为内置只读命令）—
+      "Bash(echo *)",         // 打印文本
+      "Bash(pwd)",            // 显示当前路径
+      "Bash(which *)",        // 查命令所在位置
+      "Bash(wc *)",           // 统计行/词/字数
+      "Bash(diff *)",         // 比较两文件差异
+      "Bash(sort *)",         // 排序输出（注意 sort -o 可写文件）
+      "Bash(uniq *)",         // 去重
+      "Bash(stat *)",         // 看文件元信息（大小、时间）
+      "Bash(file *)",         // 判断文件类型
+      "Bash(du *)",           // 看占用空间
+      "Bash(df *)",           // 看磁盘剩余
+      "Bash(jq *)",           // 解析/查询 JSON
+
+      // — 低风险写入与构建 —
+      "Bash(mkdir *)",        // 建目录
+      "Bash(touch *)",        // 建空文件/更新时间戳
+      "Bash(cp *)",           // 复制文件（注意：cp 也可能覆盖已有文件）
+      "Bash(pytest *)",       // 跑 Python 测试
+
+      // — 格式化与静态检查 —
+      "Bash(ruff *)",         // Python 风格检查/修复
+      "Bash(black *)",        // Python 代码格式化
+      "Bash(prettier *)",     // 前端代码格式化
+      "Bash(eslint *)",       // JS/TS 静态检查
+      "Bash(mypy *)",         // Python 类型检查
+
+      // — 解释器与安装（见文末安全提醒）—
+      "Bash(python *)",       // 运行 Python 脚本，可执行任意代码
+      "Bash(python3 *)",      // 同上
+      "Bash(pip install *)"   // 安装 Python 包，会触发第三方安装脚本
+    ],
+
+    // ===== ask：弹窗确认后才执行 =====
+    "ask": [
+      "Bash(git reset --hard *)",  // 丢弃未提交改动，不可逆
+      "Bash(rm *)",                // 删除文件（也是 rm 的兜底确认，未被 deny 命中的 rm 都会落到这里）
+      "Bash(mv *)",                // 移动/重命名，可能覆盖
+      "Bash(chmod *)",             // 改文件权限
+      "Bash(chown *)",             // 改文件属主
+      "Bash(npm install *)",       // 装 npm 包，会跑 postinstall 等外部脚本
+      "Bash(gh repo delete *)",    // 删除仓库
+      "Bash(gh pr merge *)",       // 合并 PR
+      "Bash(gh release *)"         // 发布版本
+    ],
+
+    // ===== deny：直接拒绝，无选项 =====
+    "deny": [
+      "Bash(sudo *)",              // 提权
+      "Bash(rm -rf /*)",           // 删根目录（其它 rm 形式由上面的 ask 兜底确认）
+      "Bash(rm -rf ~*)",           // 删家目录
+      "Bash(git push --force*)",   // 强制推送（--force / --force-with-lease）
+      "Bash(git push *--force*)",  // --force 出现在中间的写法
+      "Bash(git push *-f)",        // 以 -f 结尾的写法
+      "Bash(git push *-f *)",      // -f 在中间的写法，如 git push -f origin main
+      "Bash(dd *)",                // 磁盘级写入
+      "Bash(mkfs *)",              // 格式化文件系统
+      "Read(.env)",                // 读环境变量文件（同时覆盖 Bash 里的 cat/head/tail/sed .env）
+      "Read(**/.env)",             // 读任意层级 .env
+      "Read(**/.env.*)",           // 读 .env.local 等变体
+      "Read(**/secrets/**)",       // 读 secrets 目录
+      "Read(**/*credentials*)"     // 读凭证文件
+    ],
+
+    // 兜底：未匹配任何规则的命令，在首次使用该工具时弹窗询问
+    "defaultMode": "default"
+  }
+}
