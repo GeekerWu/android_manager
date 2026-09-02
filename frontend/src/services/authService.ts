@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
+
 // 💡 修正：根据实际 API 返回结构，AuthResponse 只包含 Token 相关的字段。
 interface AuthResponse {
   access_token: string;
@@ -15,7 +16,8 @@ interface AuthResponse {
  * @returns Promise<AuthResponse>：如果成功则解析为包含 Token 的响应体；否则，Promise 会被 reject。
  */
 export const loginUser = async (username: string, password: string): Promise<AuthResponse> => {
-  const API_URL = 'http://localhost:8000/login';
+  const API_URL = `${import.meta.env.VITE_API_BASE_URL}/login`;
+  // const API_URL = `http://localhost:8001/login`;
 
   // 模拟表单提交的结构化参数
   const formData = {

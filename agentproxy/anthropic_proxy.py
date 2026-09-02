@@ -116,7 +116,7 @@ def _convert_openai_to_anthropic(litellm_data: dict, original_body: dict):
 @app.post("/v1/messages")
 async def anthropic_messages(request: Request):
     body = await request.json()
-
+    # print(f"body={body.get('model')}, messages={len(body.get('messages', []))}")
     # Anthropic → OpenAI 格式转换
     messages = []
     for msg in body.get("messages", []):
@@ -150,6 +150,7 @@ async def anthropic_messages(request: Request):
         litellm_data = resp.json()
 
     anthropic_response = _convert_openai_to_anthropic(litellm_data, body)
-    print(f"[Proxy] stop_reason={anthropic_response['stop_reason']}, "
-          f"content_types={[c['type'] for c in anthropic_response['content']]}")
+    # print(f"anthropic_response={anthropic_response}")
+    # print(f"[Proxy] stop_reason={anthropic_response['stop_reason']}, "
+    f"content_types={[c['type'] for c in anthropic_response['content']]}")
     return JSONResponse(content=anthropic_response)

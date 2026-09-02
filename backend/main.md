@@ -30,7 +30,7 @@
 *   **容错性:** 整个启动事件被 `try...except` 块包裹，确保即使数据库初始化失败（例如，因为配置错误），应用依然能优雅地启动，并打印出明确的错误警告。
 
 ### 4. 路由挂载与依赖注入 (Routing and Dependency)
-*   **流程:** 所有的业务 API 路由（通过 `api_router` 导入）都会被挂载到 `/api/v1` 前缀下。
+*   **流程:** 所有的业务 API 路由（通过 `api_router` 导入）都会被挂载到 `/api` 前缀下。
 *   **保护机制:** 最重要的是，`app.include_router(...)` 必须包含 `dependencies=[Depends(get_current_user)]`。这确保了：
     1.  每次调用该路由时，都会先执行 `get_current_user`。
     2.  只有当 `get_current_user` 成功返回用户对象时，业务路由才会执行。

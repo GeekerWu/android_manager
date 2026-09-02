@@ -1,6 +1,6 @@
 # android_manager/backend/api/endpoints.py
-
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import datetime
 from typing import List
@@ -10,7 +10,33 @@ from models import Robot, Component, ControlJob, TelemetryLog # 导入所有模�
 router = APIRouter()
 
 # =============================================================
-# 🤖 1. 机器人设备管理 (Robot Management)
+# 🤖 0. 用户认证登录 (NEW: Hardcoded Login)
+# =============================================================
+
+@router.post("/login")
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    """
+    【临时/Demo】硬编码登录验证。
+    仅支持用户名: admin, 密码: admin。
+    成功后返回固定 Token: tmp_token。
+    注意: 生产环境中必须替换为完整的认证服务。
+    """
+    print(f"🔑 [HARDCODE] 登录尝试：用户名={form_data.username} 密码={form_data.password}")
+
+    if form_data.username == "admin" and form_data.password == "admin":
+        # 成功硬编码登录
+        return {"access_token": "tmp_token", "token_type": "bearer"}
+    else:
+        # 认证失败
+        from fastapi import status
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password (Using hardcoded: admin/admin)",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+# =============================================================
+# 🧩 1. 机器人设备管理 (Robot Management)
 # =============================================================
 
 @router.get("/robots/{robot_sn}")
@@ -83,13 +109,9 @@ def record_heartbeat(robot_sn: str, status: str, battery: float, component_data:
         db.commit()
         return {"message": f"Heartbeat recorded successfully. Log created."}
 
-
 # =============================================================
 # 🛠️ 3. 健康检查 API (NEW)
 # =============================================================
-
-# 由于这是一个顶层路由，不应该放在这里，而应该放在 main.py 中进行修改。
-# 为了让本次提交能独立运行，我将这个逻辑放在这里，并在 main.py 中做调用。
 
 @router.get("/health")
 def get_system_health(db: Session = Depends(get_db)):
@@ -105,8 +127,8 @@ def get_system_health(db: Session = Depends(get_db)):
         "service": "Android Manager Backend",
         "time": datetime.utcnow().isoformat(),
         "system_baseline": {
-            "battery_level": round(default_battery, 2), ## 返回默认电量占位符
+            "battery_level": round(default_battery, 2), # 返回默认电量占位符
             "message": "系统已启动，请检查 /api/v1/robots/SN001 获取详细状态。"
         }
     }
-print("✅ RESTful API 端点骨架 (endpoints.py) 已最终修正，增加了 /health 路由的增强字段。")
+print("✅ RESTful API 端点骨架 (endpoints.py) 已最终修正，增加了 /login 路由。")

@@ -10,7 +10,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
  * @returns {AxiosInstance} 配置完成的 Axios 实例。
  */
 export const apiService: AxiosInstance = axios.create({
-    baseURL: 'https://api.example.com/api/v1', // ⚠️ 待补充: 请替换为实际的后端API根URL
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8001', // 从环境变量获取，提供本地默认值 fallback
+
     timeout: 15000, // 15秒超时
     headers: {
         'Content-Type': 'application/json',
