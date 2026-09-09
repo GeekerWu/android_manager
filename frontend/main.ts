@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { router } from './router'; // ✅ 修正：改为命名导入
 import * as ElementPlus from 'element-plus';
+
 import 'element-plus/dist/index.css'
 import { ElMessage } from 'element-plus';
 import { createStore } from 'vuex';
@@ -15,6 +16,10 @@ const store = createStore({
 
 // 2. 挂载依赖
 const app = createApp(App);
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+for(const [key,component] of Object.entries(ElementPlusIconsVue)){
+  app.component(key,component)
+}
 
 // 3. 顺序调整：确保 Store 依赖被正确挂载
 app.use(router);
@@ -46,7 +51,6 @@ app.mixin({
 });
 // ---------------------------------------------------------------------
 // ======================================================================
-
 
 // 4. 挂载应用到 DOM 元素
 app.mount('#app');

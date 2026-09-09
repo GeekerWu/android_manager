@@ -1,0 +1,1 @@
+const { setupPlaywright } = await import(" file:///C:/Users/Administrator/.codex/skills/playwright/scripts/browser-client.mjs\); await setupPlaywright(); const browser = await agent.browsers.get(\playwright\); const context = await browser.newContext(); const page = await context.newPage(); await page.goto(\https://www.bing.com\); console.log(await page.title());

@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
 
-
 // 💡 修正：根据实际 API 返回结构，AuthResponse 只包含 Token 相关的字段。
 interface AuthResponse {
   access_token: string;
@@ -17,7 +16,9 @@ interface AuthResponse {
  */
 export const loginUser = async (username: string, password: string): Promise<AuthResponse> => {
   const API_URL = `${import.meta.env.VITE_API_BASE_URL}/login`;
-  // const API_URL = `http://localhost:8001/login`;
+
+  console.log('[AuthService]: Request URL ->', API_URL);
+  console.log('[AuthService]: API_BASE_URL from env ->', import.meta.env.VITE_API_BASE_URL);
 
   // 模拟表单提交的结构化参数
   const formData = {
@@ -34,7 +35,9 @@ export const loginUser = async (username: string, password: string): Promise<Aut
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
-  console.log('formData',formData)
+
+  console.log('[AuthService]: Preparing formData:', formData);
+
   try {
     // 构造表单数据体
     const body = new URLSearchParams();
@@ -43,6 +46,8 @@ export const loginUser = async (username: string, password: string): Promise<Aut
             body.append(key, String(formData[key]));
         }
     }
+
+    console.log('[AuthService]: Sending request body:', body.toString());
 
     // 发送请求
     const response = await axios.post(API_URL, body.toString(), config);
@@ -57,7 +62,7 @@ export const loginUser = async (username: string, password: string): Promise<Aut
     }
 
   } catch (error) {
-    // 捕获网络错误、超时或4xx/5xx状态码错误
+    console.error('[AuthService]: Error caught in loginUser:', error);
     if (axios.isAxiosError(error)) {
         // 尝试从错误响应中提取更具体的业务错误信息
         const errorDetails = error.response?.data || { message: '无法连接到登录服务。' };
@@ -66,7 +71,6 @@ export const loginUser = async (username: string, password: string): Promise<Aut
         const authError = new Error(`[AUTH_ERROR] ${JSON.stringify(errorDetails)}`);
         (authError as any).isNetworkError = true; // 标记为网络错误，供上层逻辑判断
         throw authError;
-
     } else if (error instanceof Error) {
         // 捕获自定义抛出的业务错误 (例如: 格式错误)
         throw error;

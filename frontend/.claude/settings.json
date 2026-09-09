@@ -1,0 +1,11 @@
+{
+  "enabledPlugins": {
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "figma@claude-plugins-official": true,
+    "safe-browser@browserbase": true,
+    "browse@browserbase": true,
+    "browser-trace@browserbase": true,
+    "playwright@claude-plugins-official": true,
+    "webmcp-gen@browserbase": true
+  }
+}

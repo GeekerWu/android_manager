@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import Components from 'unplugin-vue-components/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import { ElementPlusResolver,VueUseComponentsResolver,VueUseDirectiveResolver } from 'unplugin-vue-components/resolvers'
 
 // vite.config.ts
 // 此文件用于配置 Vite 构建工具的行为。
@@ -9,7 +13,29 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   // plugins: 插件数组，引入项目使用的构建插件。
-  plugins: [vue()],
+  plugins: [
+    vue(),
+   
+    Components({
+      resolvers: [
+        ElementPlusResolver(),
+        VueUseDirectiveResolver(),
+        VueUseComponentsResolver(),
+        IconsResolver({
+          prefix: 'icon',
+          alias: { 
+            system: 'system-unicons' 
+          },
+          enabledCollections: ['ep']
+        })
+      ]
+    }),
+    Icons({
+      compiler: "vue3",
+      autoInstall: true
+    })
+
+  ],
 
   // resolve: 解析器配置，用于设置路径别名。
   resolve: {

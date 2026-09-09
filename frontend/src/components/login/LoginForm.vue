@@ -1,180 +1,187 @@
- <template>
-    <div class="login-form-card">
-      <!-- 标题和说明 -->
-      <h2 class="form-title">🔑 用户登录</h2>
-      <p class="form-subtitle">请输入您的账号和密码以继续使用应用。</p>
+<template>
+  <div class="login-form-card">
+    <h2 class="form-title">加入我们</h2>
+    <p class="form-subtitle">使用您的账号开始体验。</p>
 
-      <!-- Element Plus 表单 -->
+    <div class="form-container">
       <el-form
-          ref="loginFormRef"
           :model="formData"
           :rules="rules"
-          @submit.native="handleLogin"
+          ref="ruleFormRef"
+          label-width="120px"
           class="el-form"
       >
-        <!-- 用户名输入字段 -->
-        <el-form-item label="用户名" prop="username" @blur="validateUsername">
+        <el-form-item label="用户名" prop="username">
           <el-input
               v-model="formData.username"
               placeholder="请输入用户名"
-              show-message
+              :disabled="isLoading"
           />
         </el-form-item>
 
-        <!-- 密码输入字段 -->
         <el-form-item label="密码" prop="password">
           <el-input
               v-model="formData.password"
               placeholder="请输入密码"
-              show-message
               type="password"
               :show-password="true"
               :disabled="isLoading"
           />
         </el-form-item>
       </el-form>
-
-      <!-- 提交按钮 -->
-      <el-button
-          type="primary"
-          :loading="isLoading"
-          @click="handleLogin"
-          class="login-button"
-          style="margin-top: 30px; width: 100%"
-      >
-        {{ isLoading ? '登录中...' : '登录' }}
-      </el-button>
-
-      <!-- 全局错误提示 -->
-      <div v-if="globalError" class="global-error">
-        <el-alert
-          title="登录失败"
-          type="danger"
-          :summary="globalError"
-          show-collapse
-        />
-      </div>
-
-      <!-- 辅助链接 -->
-      <div class="footer-links">
-        <a href="#" @click.prevent="() => {
-          ElMessageBox.alert('功能还没实现 admin/admin', 'Warning', {
-                              // if you want to disable its autofocus
-                              // autofocus: false,
-                              confirmButtonText: 'OK',
-                              callback: (action: Action) => {
-                                ElMessage({
-                                  type: 'info',
-                                  message: `action: ${action}`,
-                                })
-                              },
-                            })
-        }">忘记密码？</a>
-      </div>
     </div>
-  </template>
 
-  <script setup lang="ts">
-  import { reactive, ref } from 'vue';
-  import { ElButton, ElInput, ElMessage ,ElMessageBox  } from 'element-plus'
-  import type { Action } from 'element-plus'
+    <div class="main-action">
+      <el-button
+        @click="handleLogin"
+        :disabled="isLoading"
+        class="pill-button"
+        :style="{ opacity: isLoading ? 0.6 : 1 }"
+      >
+        {{ isLoading ? '正在登录...' : '开始使用' }}
+      </el-button>
+    </div>
+  </div>
+</template>
 
-  // 1. 定义 Props 和 Emits (API 定义层)
-  const props = defineProps<{
-    globalError: string | null;
-    isLoading: boolean;
-  }>();
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
+import { ElMessage } from 'element-plus';
+import type { FormRules } from 'element-plus';
+import { loginUser } from '@/services/authService';
+import { useAuthStore } from '@/store/auth';
 
-  const emit = defineEmits<{
-    (event: 'submit-login', payload: { username: string; password: string }): void;
-  }>();
+const authStore = useAuthStore();
 
-  // 2. 声明响应式状态 (State Management)
-  const formData = reactive({
-    username: '',
-    password: ''
-  });
+const formData = reactive<{
+  username: string;
+  password: string;
+}>({
+  username: '',
+  password: ''
+});
 
-  // 3. 声明本地错误状态
-  const usernameError = ref<string | null>(null);
-  const passwordError = ref<string | null>(null);
+const ruleFormRef = ref<any>(null);
+const isLoading = ref(false);
 
-  // 4. 校验函数 (Business Logic)
-  const validateUsername = (): boolean => {
-    if (formData.username.length < 4) {
-      usernameError.value = '用户名长度至少需要 4 个字符';
-      return false;
+const rules: FormRules = reactive({
+  username: [
+    {
+      required: true,
+      message: '请输入用户名',
+      trigger: 'blur',
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: 'blur',
+    },
+  ],
+});
+
+const handleLogin = async () => {
+  // 1. 基本数据校验
+  if (!formData.username || !formData.password) {
+    ElMessage.warning('请填写所有必填字段');
+    return;
+  }
+
+  try {
+    // 2. 执行 Element Plus 表单验证
+    if (ruleFormRef.value) {
+      const isValid = await ruleFormRef.value.validate();
+      if (!isValid) return;
     }
-    usernameError.value = null;
-    return true;
-  };
 
-  const validatePassword = (): boolean => {
-    if (formData.password.length < 4) {
-      passwordError.value = '密码长度至少需要 4 个字符';
-      return false;
-    }
-    passwordError.value = null;
-    return true;
-  };
+    // 3. 进入请求状态
+    isLoading.value = true;
 
-  // 5. 核心事件处理器 (Event Handler)
-  const handleLogin = (event: Event) => {
-    event.preventDefault();
+    // 4. 直接调用 API
+    const response = await loginUser(formData.username, formData.password);
 
-    // *** 打印日志：用户点击，开始处理 ***
-    console.log('✅ 用户点击了登录按钮，尝试提交表单。');
+    // 5. 成功处理
+    authStore.loginSuccess({
+      accessToken: response.access_token,
+      userData: { username: formData.username }
+    });
 
-    // 校验
-    const isUsernameValid = validateUsername();
-    const isPasswordValid = validatePassword();
+    ElMessage.success('登录成功');
+  } catch (error: any) {
+    // 6. 统一错误处理
+    let errorMessage = '登录失败';
 
-    if (!isUsernameValid || !isPasswordValid) {
-      // ****** 最终修复点：主动抛出全局警告提示 ******
-      var errmsg =""
-      if(!isUsernameValid){
-         errmsg = errmsg+usernameError.value
-      } 
-      if(!isPasswordValid){
-         errmsg =errmsg+passwordError.value
+    if (error.message?.includes('[AUTH_ERROR]')) {
+      try {
+        const msg = JSON.parse(error.message.replace('[AUTH_ERROR] ', ''));
+        errorMessage = msg.message || '登录失败';
+      } catch {
+        errorMessage = '认证失败，请检查账号或密码';
       }
-      
-      
-      ElMessage.warning('⚠️ 登录校验失败：请检查所有表单字段是否都已填写且符合要求。'+errmsg);
-      return; // 阻止事件发射，流程结束
+    } else {
+      errorMessage = error.message || '系统发生错误';
     }
 
-    // 校验通过，触发父组件事件
-    emit('submit-login', { username: formData.username, password: formData.password });
-  };
-  </script>
-
-  <style scoped>
-  /* =================================================================== */
-  /* 最终样式：结合了参考图的视觉感、Element Plus 的中性风格，达到视觉统一的最佳点。 */
-  /* =================================================================== */
-
-  .login-form-card {
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    console.error('Login Error:', error);
+    ElMessage.error(errorMessage);
+  } finally {
+    // 7. 无论成功失败，最后都要关闭 Loading
+    isLoading.value = false;
   }
+};
+</script>
 
-  .form-title {
-    color: #303133;
-    margin-bottom: 8px;
-  }
+<style scoped>
+.login-form-card {
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-  .form-subtitle {
-    color: #909399;
-    margin-bottom: 30px;
-  }
+.form-title {
+  color: #303133;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
 
-  .el-form {
-    margin-bottom: 30px;
-  }
+.form-subtitle {
+  color: #909399;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
 
-  .global-error {
-    margin-top: 20px;
-  }
-  </style>
+.form-container {
+  flex: 1;
+  margin-bottom: 30px;
+}
+
+.main-action {
+  margin-top: 10px;
+}
+
+.pill-button {
+  width: 100%;
+  height: 48px;
+  background-color: #007AFF;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.pill-button:active {
+  opacity: 0.8;
+}
+
+.el-form {
+  margin-bottom: 20px;
+}
+</style>

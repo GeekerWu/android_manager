@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@playwright/test": "^1.63.0",
     "axios": "^1.19.0",
     "element-plus": "^2.14.5",
     "pinia": "^4.0.3",
@@ -16,10 +17,15 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@iconify-json/ep": "^1.2.4",
     "@types/node": "^24.13.3",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vue/tsconfig": "^0.9.1",
+    "playwright": "^1.63.0",
     "typescript": "~6.0.2",
+    "unplugin-icons": "^23.0.1",
+    "unplugin-vue-components": "^32.1.0",
     "vite": "^8.2.2",
     "vue-tsc": "^3.3.11"
   }

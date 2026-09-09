@@ -1,0 +1,20 @@
+- generic [ref=e8]:
+  - generic [ref=e10]:
+    - img "品牌Logo" [ref=e12]
+    - heading "赋能你的业务，让工作更高效。" [level=1] [ref=e13]
+    - paragraph [ref=e14]: 我们致力于构建一个用户友好、流程透明、极具扩展性的管理前端解决方案，让每一次交互都充满确定性。
+  - generic [ref=e16]:
+    - heading "🔑 用户登录" [level=2] [ref=e17]
+    - paragraph [ref=e18]: 请输入您的账号和密码以继续使用应用。
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: 用户名
+        - textbox "用户名" [ref=e25]:
+          - /placeholder: 请输入用户名
+      - generic [ref=e26]:
+        - generic [ref=e27]: 密码
+        - textbox "密码" [ref=e31]:
+          - /placeholder: 请输入密码
+    - button "登录" [ref=e32] [cursor=pointer]
+    - link "忘记密码？" [ref=e35] [cursor=pointer]:
+      - /url: "#"

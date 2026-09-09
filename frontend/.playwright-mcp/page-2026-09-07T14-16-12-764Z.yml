@@ -1,0 +1,40 @@
+- generic [ref=f1e3]:
+  - generic [ref=f1e32]:
+    - generic [ref=f1e33]:
+      - img "Vue logo" [ref=f1e34]
+      - img "Vite logo" [ref=f1e35]
+    - generic [ref=f1e36]:
+      - heading "Get started" [level=1] [ref=f1e37]
+      - paragraph [ref=f1e38]:
+        - text: Edit
+        - code [ref=f1e39]: src/App.vue
+        - text: and save to test
+        - code [ref=f1e40]: HMR
+    - button "Count is 0" [ref=f1e41]
+  - generic [ref=f1e42]:
+    - generic [ref=f1e43]:
+      - heading "Documentation" [level=2] [ref=f1e46]
+      - paragraph [ref=f1e47]: Your questions, answered
+      - list [ref=f1e48]:
+        - listitem [ref=f1e49]:
+          - link "Explore Vite" [ref=f1e50] [cursor=pointer]:
+            - /url: https://vite.dev/
+        - listitem [ref=f1e51]:
+          - link "Learn more" [ref=f1e52] [cursor=pointer]:
+            - /url: https://vuejs.org/
+    - generic [ref=f1e53]:
+      - heading "Connect with us" [level=2] [ref=f1e56]
+      - paragraph [ref=f1e57]: Join the Vite community
+      - list [ref=f1e58]:
+        - listitem [ref=f1e59]:
+          - link "GitHub" [ref=f1e60] [cursor=pointer]:
+            - /url: https://github.com/vitejs/vite
+        - listitem [ref=f1e63]:
+          - link "Discord" [ref=f1e64] [cursor=pointer]:
+            - /url: https://chat.vite.dev/
+        - listitem [ref=f1e67]:
+          - link "X.com" [ref=f1e68] [cursor=pointer]:
+            - /url: https://x.com/vite_js
+        - listitem [ref=f1e71]:
+          - link "Bluesky" [ref=f1e72] [cursor=pointer]:
+            - /url: https://bsky.app/profile/vite.dev

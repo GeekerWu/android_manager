@@ -1,95 +1,66 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import heroImg from '../assets/hero.png'
-import viteLogo from '../assets/vite.svg'
-import vueLogo from '../assets/vue.svg'
+<template>
+  <div class="dashboard-container">
+    <el-card class="dashboard-card">
+      <template #header>
+        <h2 class="title">DashBoard</h2>
+      </template>
+      <div class="content">
+        <el-table :data="metrics" border stripe style="width: 100%" height="auto">
+          <el-table-column prop="metric" label="Metric" />
+          <el-table-column prop="value" label="Value" />
+          <el-table-column label="Status">
+            <template #default="scope">
+              <el-tag :type="scope.row.statusType">
+                {{ scope.row.statusText }}
+              </el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-card>
+  </div>
+</template>
 
-const count = ref(0)
+<script setup>
+import { ref } from 'vue';
+
+// TODO: Replace with real data from apiService
+const metrics = ref([
+  { metric: 'System Uptime', value: '142h 12m', statusText: 'Online', statusType: 'success' },
+  { metric: 'Active Users', value: '1,284', statusText: 'Stable', statusType: 'success' },
+  { metric: 'Server Load', value: '42%', statusText: 'Normal', statusType: 'warning' },
+  { metric: 'Pending Tasks', value: '12', statusText: 'Pending', statusType: 'info' }
+]);
 </script>
 
-<template>
-  <section id="center">
-    <div class="hero">
-      <img :src="heroImg" class="base" width="170" height="179" alt="" />
-      <img :src="vueLogo" class="framework" alt="Vue logo" />
-      <img :src="viteLogo" class="vite" alt="Vite logo" />
-    </div>
-    <div>
-      <h1>Get started</h1>
-      <p>Edit <code>src/App.vue</code> and save to test <code>HMR</code></p>
-    </div>
-    <button type="button" class="counter" @click="count++">
-      Count is {{ count }}
-    </button>
-  </section>
+<style scoped>
+.dashboard-container {
+  padding: 24px;
+}
 
-  <div class="ticks"></div>
+.dashboard-card {
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
 
-  <section id="next-steps">
-    <div id="docs">
-      <svg class="icon" role="presentation" aria-hidden="true">
-        <use href="/icons.svg#documentation-icon"></use>
-      </svg>
-      <h2>Documentation</h2>
-      <p>Your questions, answered</p>
-      <ul>
-        <li>
-          <a href="https://vite.dev/" target="_blank">
-            <img class="logo" :src="viteLogo" alt="" />
-            Explore Vite
-          </a>
-        </li>
-        <li>
-          <a href="https://vuejs.org/" target="_blank">
-            <img class="button-icon" :src="vueLogo" alt="" />
-            Learn more
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div id="social">
-      <svg class="icon" role="presentation" aria-hidden="true">
-        <use href="/icons.svg#social-icon"></use>
-      </svg>
-      <h2>Connect with us</h2>
-      <p>Join the Vite community</p>
-      <ul>
-        <li>
-          <a href="https://github.com/vitejs/vite" target="_blank">
-            <svg class="button-icon" role="presentation" aria-hidden="true">
-              <use href="/icons.svg#github-icon"></use>
-            </svg>
-            GitHub
-          </a>
-        </li>
-        <li>
-          <a href="https://chat.vite.dev/" target="_blank">
-            <svg class="button-icon" role="presentation" aria-hidden="true">
-              <use href="/icons.svg#discord-icon"></use>
-            </svg>
-            Discord
-          </a>
-        </li>
-        <li>
-          <a href="https://x.com/vite_js" target="_blank">
-            <svg class="button-icon" role="presentation" aria-hidden="true">
-              <use href="/icons.svg#x-icon"></use>
-            </svg>
-            X.com
-          </a>
-        </li>
-        <li>
-          <a href="https://bsky.app/profile/vite.dev" target="_blank">
-            <svg class="button-icon" role="presentation" aria-hidden="true">
-              <use href="/icons.svg#bluesky-icon"></use>
-            </svg>
-            Bluesky
-          </a>
-        </li>
-      </ul>
-    </div>
-  </section>
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-h);
+}
 
-  <div class="ticks"></div>
-  <section id="spacer"></section>
-</template>
+.content {
+  margin-top: 20px;
+}
+
+:deep(.el-table) {
+  background-color: var(--surface);
+}
+
+:deep(.el-table .el-table-header-wrapper) {
+  background-color: var(--border);
+}
+</style>
