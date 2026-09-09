@@ -1,0 +1,106 @@
+# .gitignore
+
+# --- Project Specific Exclusions ---
+# Ignore the directory containing temporary/test code
+/others/
+
+# Ignore the design system directory
+/frontend_design/
+
+# Ignore local cache files
+/raw_data_cache.md
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.exec
+.Python
+env/
+venv/
+ENV/
+.env
+.env.1
+.env.development.local
+.env.test.local
+.env.production.local
+.functions_cache/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pylint.d/
+.docker/
+.dockerignore
+.dockerlayernotify
+*.pyc
+*.pyo
+*.pyd
+
+# --- Node.js / Frontend ---
+node_modules/
+.npm
+.eslintcache
+.stylelint
+.prettier_cache
+.cache
+.DS_Store
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+.hidden
+.vscode/
+.idea/
+.webmaker/
+.editorconfig
+.project
+.settings/
+.bin/
+dist/
+build/
+.next/
+.nuxt.tmp/
+.output/
+.cache/
+.vercel/
+.netlify/
+
+# --- IDE / Editors ---
+.idea/
+.vscode/
+*.swp
+*.swo
+*.seb
+*.identities
+*.cache
+*.metadata
+*.DS_Store
+.git/
+.svn/
+.hg/
+.git/hooks/
+.git/info/
+.git/objects/
+.git/logs/
+.git/refs/
+.git/worktrees/
+.git/description
+.git/hooks/applypatch-msg.sample
+.git\hooks\commit-msg.sample
+.git\hooks\pre-commit.sample
+.git\hooks\pre-merge-commit.sample
+.git\hooks\pre-push.sample
+.git\hooks\pre-rebase.sample
+.git\hooks\pre-receive.sample
+.git\hooks\post-update.sample
+.git\hooks\prepare-commit-msg.sample
+.git\hooks\push-to-checkout.sample
+.git\hooks\sendemail-validate.sample
+.git\hooks\update.sample
+
+# --- Databases & Logs ---
+*.log
+*.sqlite
+*.db
+*.db-journal
+backend/robot_manager.db
