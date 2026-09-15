@@ -30,9 +30,6 @@
           :index="item.index"
         >
           <template #title>
-            <!-- <el-icon :size="20"><icon-ep-edit /></el-icon> -->
-            <!-- {{item.iconname}} -->
-            <!-- {{item.icon}} -->
             <el-icon>
                <component class="icons" :is="item.icon" ></component>
             </el-icon>
@@ -58,7 +55,7 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
 import {ElIcon} from 'element-plus';
-import {User,CircleClose,Setting,Camera,Document} from '@element-plus/icons-vue';
+import {User,CircleClose,Setting,Camera,Document,Cpu} from '@element-plus/icons-vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -71,7 +68,8 @@ let menuItems = [
   { index: 'profile', label: 'Profile', icon:User },
   { index: 'settings', label: 'Settings', icon:Setting },
   { index: 'camera', label: 'Camera', icon:Camera},
-];
+  { index: 'onnxruntime', label: 'ONNX Runtime', icon:Cpu},
+  ];
 
 const handleToggle = () => {
   isCollapsed.value = !isCollapsed.value;
@@ -86,6 +84,7 @@ const handleNavSelect = (key) => {
     profile: '/profile',
     settings: '/settings',
     camera: '/camera',
+    onnxruntime: '/onnxruntime',
   };
 
   if (routes[key]) {

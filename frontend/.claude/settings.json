@@ -1,7 +1,7 @@
 {
   "enabledPlugins": {
     "chrome-devtools-mcp@claude-plugins-official": true,
-    "figma@claude-plugins-official": true,
+    "figma@claude-plugins-official": false,
     "safe-browser@browserbase": true,
     "browse@browserbase": true,
     "browser-trace@browserbase": true,

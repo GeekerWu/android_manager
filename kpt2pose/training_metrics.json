@@ -1,0 +1,7 @@
+{
+    "mode": "train",
+    "epochs_run": 50,
+    "validation_mse": 640.0028076171875,
+    "best_mae": 35.72771453857422,
+    "total_samples": 30
+}

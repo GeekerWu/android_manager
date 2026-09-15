@@ -104,3 +104,12 @@ build/
 *.db
 *.db-journal
 backend/robot_manager.db
+
+# --- Model Files ---
+*.pth
+*.onnx
+
+# --- Test Data / Images ---
+kpt2pose/onnxruntime/test_img/
+*.mjs
+

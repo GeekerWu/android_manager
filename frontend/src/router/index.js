@@ -35,6 +35,11 @@ const routes = [
         name: 'Camera',
         component: Camera,
       },
+  {
+    path: 'onnxruntime',
+    name: 'OnnxRuntime',
+    component: () => import('@/components/OnnxRuntime.vue'),
+  },
     ]
   },
   {
