@@ -49,10 +49,10 @@
                                 {{ status.isCameraActive ? 'Turn Off Camera' : 'Turn On Camera' }}
                             </el-button>
                         </div>
+                    </div>
 
-                        <div class="info-text" v-if="status.snapshotCaptured && !status.isProcessing">
-                            Next: Click "Run Inference" to process the captured frame.
-                        </div>
+                    <div class="info-text" v-if="status.snapshotCaptured && !status.isProcessing">
+                        Next: Click "Run Inference" to process the captured frame.
                     </div>
 
                     <!-- Right Side: Result Preview -->
@@ -64,11 +64,13 @@
                                 {{ status.snapshotCaptured ? 'Snapshot captured. Ready to infer.' :
                                 'Load model first.' }}
                             </p>
-                            <div v-else-if="inferenceResults.keypoints.length === 0" class="placeholder-text">
-                                No keypoints detected.
+                            <div v-else-if="validPointCount === 0" class="placeholder-text">
+                                No keypoints detected in view.
                             </div>
                             <div v-else class="stats">
-                                <p>Detected Points: {{ inferenceResults.keypoints.length / 2 }}</p>
+                                <p>Visible Points: {{ validPointCount }}</p>
+                                <p>Out-of-bounds: {{ outOfBoundsCount }}</p>
+                                <p class="small-text">Total detected: {{ inferenceResults.keypoints.length / 2 }}</p>
                             </div>
                         </div>
                     </div>
@@ -115,6 +117,8 @@ interface InferenceResult {
 const videoRef = ref<HTMLVideoElement | null>(null);
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const resultCanvasRef = ref<HTMLCanvasElement | null>(null);
+const validPointCount = ref(0);
+const outOfBoundsCount = ref(0);
 
 // --- State ---
 const status = inferenceService.status;
@@ -213,8 +217,14 @@ const handleRunInference = async () => {
             return;
         }
 
+        // --- 调试打印 ---
+        console.log('[Debug] Inference Result received:', res);
+        console.log('[Debug] Keypoints sample (first 10):', res.keypoints.slice(0, 10));
+        console.log('[Debug] Scores sample (first 10):', res.scores.slice(0, 10));
+        // ----------------
+
         inferenceResults.value = res;
-        drawResults(res.inputSize);
+        drawResults();
         ElMessage.success('Inference complete');
     } catch (err) {
         console.error('[UI] Inference error:', err);
@@ -224,61 +234,78 @@ const handleRunInference = async () => {
     }
 };
 
-const drawResults = (inputSize: [number, number]) => {
+const drawResults = () => {
     const canvas = resultCanvasRef.value;
     const ctx = canvas?.getContext('2d');
-    if (!ctx || !canvas || !inferenceResults.value) {
+    const snapshotCanvas = canvasRef.value;
+
+    if (!ctx || !canvas || !snapshotCanvas || !inferenceResults.value) {
         return;
     }
 
-    const [modelW, modelH] = inputSize;
-    if (canvas.width !== modelW || canvas.height !== modelH) {
-        canvas.width = modelW;
-        canvas.height = modelH;
+    // 使用快照本身的尺寸作为目标尺寸
+    const targetWidth = snapshotCanvas.width;
+    const targetHeight = snapshotCanvas.height;
+
+    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
     }
 
-    // Draw preview image if available
-    if (canvasRef.value) {
-        ctx.drawImage(canvasRef.value, 0, 0, canvas.width, canvas.height);
-    } else {
-        ctx.fillStyle = '#f8fafc';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    // Draw preview image (it is already at the correct size)
+    ctx.drawImage(snapshotCanvas, 0, 0, canvas.width, canvas.height);
 
     const { keypoints } = inferenceResults.value;
+    let visibleCount = 0;
+    let outCount = 0;
 
-    const scaleX = canvas.width / modelW;
-    const scaleY = canvas.height / modelH;
-
-    for (let i = 0; i < keypoints.length; i += 2) {
-        const x = keypoints[i] * scaleX;
-        const y = keypoints[i + 1] * scaleY;
-
-        ctx.fillStyle = PALETTE[Math.floor((i / 2) % PALETTE.length)];
-        ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI * 2);
-        ctx.fill();
-
-        const skeletonIdx = Math.floor((i / 2) % SKELETON.length);
-        const [u, v] = SKELETON[skeletonIdx];
-
+    // 1. Draw all skeleton lines first (so they are behind the points)
+    ctx.lineWidth = 3;
+    for (const [u, v] of SKELETON) {
         const uIdx = u * 2;
         const vIdx = v * 2;
 
         if (uIdx < keypoints.length && vIdx < keypoints.length) {
-            const ux = keypoints[uIdx] * scaleX;
-            const uy = keypoints[uIdx + 1] * scaleY;
-            const vx = keypoints[vIdx] * scaleX;
-            const vy = keypoints[vIdx + 1] * scaleY;
+            const ux = keypoints[uIdx];
+            const uy = keypoints[uIdx + 1];
+            const vx = keypoints[vIdx];
+            const vy = keypoints[vIdx + 1];
 
-            ctx.strokeStyle = PALETTE[skeletonIdx % PALETTE.length];
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(ux, uy);
-            ctx.lineTo(vx, vy);
-            ctx.stroke();
+            // 检查点是否在画布范围内
+            if (ux >= 0 && ux <= canvas.width && uy >= 0 && uy <= canvas.height &&
+                vx >= 0 && vx <= canvas.width && vy >= 0 && vy <= canvas.height) {
+                ctx.strokeStyle = '#3399ff';
+                ctx.beginPath();
+                ctx.moveTo(ux, uy);
+                ctx.lineTo(vx, vy);
+                ctx.stroke();
+            }
         }
     }
+
+    // 2. Draw all keypoints
+    for (let k = 0; k < keypoints.length / 2; k++) {
+        const x = keypoints[k * 2];
+        const y = keypoints[k * 2 + 1];
+
+        if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
+            visibleCount++;
+            ctx.fillStyle = PALETTE[k % PALETTE.length];
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 绘制模型原始索引作为标签
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 10px Arial';
+            ctx.fillText(k, x + 5, y - 5);
+        } else {
+            outCount++;
+        }
+    }
+
+    validPointCount.value = visibleCount;
+    outOfBoundsCount.value = outCount;
 };
 
 let stream: MediaStream | null = null;
@@ -293,6 +320,7 @@ onUnmounted(() => {
         stream = null;
     }
 });
+
 </script>
 
 <style scoped>
@@ -409,7 +437,7 @@ onUnmounted(() => {
 .result-wrapper {
     flex: 1;
     background: #f8fafc;
-    border: 2px dashed #cbd5e1;
+    border: 2px dashed #cbd51e;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -432,6 +460,20 @@ onUnmounted(() => {
 .info-text {
     margin-top: 10px;
     font-size: 0.85rem;
+    color: #64748b;
+}
+
+.stats {
+    text-align: left;
+    background: #f1f5f9;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.small-text {
+    font-size: 0.75rem;
     color: #64748b;
 }
 
