@@ -113,3 +113,4 @@ backend/robot_manager.db
 kpt2pose/onnxruntime/test_img/
 *.mjs
 
+/esp32c3/

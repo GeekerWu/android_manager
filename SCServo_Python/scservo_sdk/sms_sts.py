@@ -108,4 +108,41 @@ class sms_sts(protocol_packet_handler):
 
     def unLockEprom(self, scs_id):
         return self.write1ByteTxRx(scs_id, SMS_STS_LOCK, 0)
+    
+
+    def ReadLoad(self, scs_id):
+        # scs_present_load4B, scs_comm_result, scs_error = self.read4ByteTxRx(scs_id, SCSCL_PRESENT_LOAD_L)
+        scs_present_load2B, scs_comm_result, scs_error = self.read2ByteTxRx(scs_id, SMS_STS_PRESENT_LOAD_L)
+        Strbyte=bin(scs_present_load2B)
+        # print(str(scs_present_load2B))
+        # scs_present_load1B, scs_comm_result, scs_error = self.read1ByteTxRx(scs_id, SCSCL_PRESENT_LOAD_L)
+        #scs_present_load = self.scs_loword(scs_present_load)
+        #scs_present_load = self.scs_hiword(scs_present_load)
+        # print(self.scs_loword(scs_present_voltage))
+        return self.scs_tohost(scs_present_load2B,10),Strbyte, scs_comm_result, scs_error
+
+    def ReadTmp(self, scs_id):
+        #scs_present_tmp4B, scs_comm_result, scs_error = self.read4ByteTxRx(scs_id, SCSCL_PRESENT_TEMPERATURE)
+        #scs_present_tmp2B, scs_comm_result, scs_error = self.read2ByteTxRx(scs_id, SCSCL_PRESENT_TEMPERATURE)
+        scs_present_tmp1B, scs_comm_result, scs_error = self.read1ByteTxRx(scs_id, SMS_STS_PRESENT_TEMPERATURE)
+        # scs_present_load = self.scs_loword(scs_present_load)
+        # scs_present_load = self.scs_hiword(scs_present_load)
+        # print(self.scs_loword(scs_present_voltage))
+        # return scs_present_tmp4B, scs_present_tmp2B, scs_present_tmp1B, scs_comm_result, scs_error
+        return scs_present_tmp1B, scs_comm_result, scs_error
+
+    def ReadVolt(self, scs_id):
+        #scs_present_volt4B, scs_comm_result, scs_error = self.read4ByteTxRx(scs_id, SCSCL_PRESENT_VOLTAGE)
+        #scs_present_volt2B, scs_comm_result, scs_error = self.read2ByteTxRx(scs_id, SCSCL_PRESENT_VOLTAGE)
+        scs_present_volt1B, scs_comm_result, scs_error = self.read1ByteTxRx(scs_id, SMS_STS_PRESENT_VOLTAGE)
+        # scs_present_load = self.scs_loword(scs_present_load)
+        # scs_present_load = self.scs_hiword(scs_present_load)
+        # print(self.scs_loword(scs_present_voltage))
+        # return scs_present_volt4B, scs_present_volt2B, scs_present_volt1B, scs_comm_result, scs_error
+        return scs_present_volt1B, scs_comm_result, scs_error
+
+    def ReadCurrPosition(self, scs_id):
+        scs_present_position, scs_comm_result, scs_error = self.read2ByteTxRx(scs_id, SMS_STS_PRESENT_POSITION_L)
+        # return self.scs_tohost(scs_present_position, 15), scs_comm_result, scs_error
+        return scs_present_position, scs_comm_result, scs_error
 
