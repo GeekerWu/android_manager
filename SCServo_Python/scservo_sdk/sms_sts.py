@@ -108,7 +108,6 @@ class sms_sts(protocol_packet_handler):
 
     def unLockEprom(self, scs_id):
         return self.write1ByteTxRx(scs_id, SMS_STS_LOCK, 0)
-    
 
     def ReadLoad(self, scs_id):
         # scs_present_load4B, scs_comm_result, scs_error = self.read4ByteTxRx(scs_id, SCSCL_PRESENT_LOAD_L)

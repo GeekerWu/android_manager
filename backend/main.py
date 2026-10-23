@@ -1,4 +1,3 @@
-# android_manager/backend/main.py
 import argparse
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
@@ -7,15 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import Base, engine
 
-# =================================================================
-# ⚙️ 配置变量
-# =================================================================
-# 端口号和配置参数将从命令行传入，这里只保留默认值作为备用。
-DEFAULT_PORT = 8001
-# ... (其他代码保持不变)
-# =================================================================
-
-# 导入所有模型（假设存在）
+# 导入所有模型
 from models import Robot, Component, ControlJob, TelemetryLog
 
 # 从 security 模块引入认证和JWT工具
@@ -27,6 +18,16 @@ from security import (
     status
 )
 
+# 导入路由器
+from api.endpoints import router as api_router
+from api.servo_service import router as servo_router
+
+# =================================================================
+# ⚙️ 配置变量
+# =================================================================
+# 端口号和配置参数将从命令行传入，这里只保留默认值作为备用。
+DEFAULT_PORT = 8001
+
 # =================================================================
 # 1. 初始化 (Initialization)
 # =================================================================
@@ -35,9 +36,7 @@ from security import (
 app = FastAPI(title="Android Manager API", description="机器人状态监控与控制API")
 
 # 3. 配置 CORS 中间件 (关键步骤)
-origins = [
-    "*"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -47,7 +46,6 @@ app.add_middleware(
     allow_headers=["*"],            # 允许所有 HTTP Header
 )
 
-
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
     """
@@ -55,7 +53,7 @@ async def auth_middleware(request: Request, call_next):
     注意: 此版本已根据开发需求修改为硬编码明文密钥校验，**极度不安全，仅用于开发/测试！**
     """
     # 1. 允许的公共路径
-    if request.url.path in ["/login", "/docs", "/openapi.json"]:
+    if request.url.path in ["/login", "/docs", "/openapi.json"] or request.url.path.startswith("/api/servo"):
         return await call_next(request)
 
     # 2. 硬编码密钥校验 (Developer Override)
@@ -72,7 +70,6 @@ async def auth_middleware(request: Request, call_next):
     # 3. 流程放行
     return await call_next(request)
 
-
 # ----------------------------------------------------------------
 # 2. 数据库初始化 (Startup Event)
 # ----------------------------------------------------------------
@@ -85,9 +82,11 @@ async def startup_event():
         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
         db: Session = SessionLocal()
 
+        # 【核心修复】：在查询任何数据前，先确保所有的表（robots, components, etc.）都已在数据库中创建
+        Base.metadata.create_all(bind=engine)
+
         # 检查并创建示例机器人 (逻辑保持不变)
         try:
-            from models import Robot, Component # 确保导入
             existing_robot = db.query(Robot).filter(Robot.robot_sn == "SN001").first()
 
             if existing_robot is None:
@@ -105,7 +104,7 @@ async def startup_event():
                 print(f"✅ 示例机器人 'SN001' 已存在，跳过创建。")
         except ImportError:
             print("⚠️ 警告：无法导入 models.py 或数据库模型，跳过数据库初始化部分。")
-            
+
     except Exception as e:
         print(f"⚠️ 启动时初始化数据库失败: {e}")
     finally:
@@ -114,13 +113,13 @@ async def startup_event():
 # ----------------------------------------------------------------
 # 3. 登录路由 (Login Endpoint)
 # ----------------------------------------------------------------
+
 @app.post("/login")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     """
     模拟用户登录。接收用户名和密码，验证凭证，成功后生成 JWT。
     """
     print(f"🔑 登录尝试：用户名={form_data.username,} 密码={form_data.password}")
-    # 1. 使用后端定义的函数进行用户凭证校验
     credentials = get_user_credentials(form_data.username, form_data.password)
 
     if not credentials:
@@ -137,13 +136,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     # 3. 返回 Token 给前端
     return {"access_token": access_token, "token_type": "bearer"}
 
-
+# ----------------------------------------------------------------
 # 4. 路由挂载 (Router Inclusion)
-from api.endpoints import router as api_router
+# ----------------------------------------------------------------
+
 # ⭐️ 核心修改：这里所有路由都需要通过get_current_user 进行保护
 # 注意：我们在路由装饰器上添加 Depends(get_current_user) 来保护业务路由
 app.include_router(api_router, prefix="/api", dependencies=[Depends(get_current_user)])
-
+app.include_router(servo_router)
 
 def main(args):
     """
@@ -152,15 +152,12 @@ def main(args):
     global SERVICE_PORT
     SERVICE_PORT = args.port
 
-    # ⚠️ 注意：这里不再重新实例化 app，因为所有配置已在全局作用域完成。
-    # 我们只需要启动它。
     print("===================================================")
     print(f"🚀 服务已配置为通过脚本启动。")
     print(f"🚀 监听地址: 0.0.0.0:{SERVICE_PORT}")
     print("===================================================")
     # 启动 Uvicorn，因为它能感知全局作用域已经设置好的 app 实例。
     uvicorn.run(app, host="0.0.0.0", port=SERVICE_PORT)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Android Manager Backend Service Launcher.")

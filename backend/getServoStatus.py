@@ -204,7 +204,7 @@ while 1:
             )
         ''')
 
-        for SERVO_ID in range(1, 55):
+        for SERVO_ID in range(1, 56):
             scs_model_number, scs_comm_result, scs_error = packetHandler.ping(SERVO_ID)
             if scs_comm_result == COMM_SUCCESS:
                 # 1. 判断 Servo 类型
