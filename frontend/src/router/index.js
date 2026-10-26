@@ -21,6 +21,11 @@ const routes = [
         component: DashBoard,
       },
       {
+        path: 'randompose',
+        name: 'RandomPose',
+        component: () => import('@/components/randompose/RandomPoseParameter.vue'),
+      },
+      {
         path: 'profile',
         name: 'Profile',
         component: UserProfile,

@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from database import Base, engine
+from database import Base, engine, initialize_ui_random_pose_table
 
 # 导入所有模型
 from models import Robot, Component, ControlJob, TelemetryLog
@@ -21,6 +21,7 @@ from security import (
 # 导入路由器
 from api.endpoints import router as api_router
 from api.servo_service import router as servo_router
+from api.randompose_service import router as randompose_router
 
 # =================================================================
 # ⚙️ 配置变量
@@ -144,6 +145,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 # 注意：我们在路由装饰器上添加 Depends(get_current_user) 来保护业务路由
 app.include_router(api_router, prefix="/api", dependencies=[Depends(get_current_user)])
 app.include_router(servo_router)
+app.include_router(randompose_router)
 
 def main(args):
     """

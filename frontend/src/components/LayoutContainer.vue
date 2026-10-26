@@ -65,6 +65,7 @@ const activeKey = ref('dashboard');
 
 let menuItems = [
   { index: 'dashboard', label: 'Dashboard', icon:Document},
+  { index: 'randompose', label: 'Randompose', icon:Setting},
   { index: 'profile', label: 'Profile', icon:User },
   { index: 'settings', label: 'Settings', icon:Setting },
   { index: 'camera', label: 'Camera', icon:Camera},
@@ -81,6 +82,7 @@ const handleToggle = () => {
 const handleNavSelect = (key) => {
   const routes = {
     dashboard: '/dashboard',
+    randompose: '/randompose',
     profile: '/profile',
     settings: '/settings',
     camera: '/camera',
