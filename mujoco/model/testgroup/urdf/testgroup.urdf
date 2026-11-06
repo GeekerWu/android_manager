@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="testgroup">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.056985 0.2 -6.9389E-18"
+        rpy="0 0 0" />
+      <mass
+        value="32.861" />
+      <inertia
+        ixx="0.48412"
+        ixy="-4.6472E-16"
+        ixz="-5.3117E-18"
+        iyy="1.2479"
+        iyz="2.4633E-18"
+        izz="1.6772" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testgroup/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testgroup/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="roller1_link">
+    <inertial>
+      <origin
+        xyz="-0.16993 -0.0023717 0.05"
+        rpy="0 0 0" />
+      <mass
+        value="37.322" />
+      <inertia
+        ixx="0.49917"
+        ixy="-0.0127"
+        ixz="-1.0622E-16"
+        iyy="1.4089"
+        iyz="-2.8453E-17"
+        izz="1.8459" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testgroup/meshes/roller1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://testgroup/meshes/roller1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="roller1_joint"
+    type="revolute">
+    <origin
+      xyz="-0.25 0.2 0.05"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="roller1_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1"
+      upper="1"
+      effort="100"
+      velocity="100" />
+  </joint>
+</robot>

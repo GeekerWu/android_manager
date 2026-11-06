@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="robot_structure_real_size">
+  <!-- customize start -->
+  <mujoco>
+      <compiler meshdir="" 
+        balanceinertia="true" 
+        discardvisual="false"/>
+  </mujoco>
+  <link name="world"></link>
+  <joint name="floating_base_joint" type="floating">
+    <parent link="world" />
+    <child link="base_link"/>
+  </joint>
+  <!-- customize end  -->
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="6.14553106247005E-18 1.73472347597681E-18 0.02"
+        rpy="0 0 0" />
+      <mass
+        value="0.141991148575129" />
+      <inertia
+        ixx="2.32266774546245E-05"
+        ixy="8.27180612553027E-23"
+        ixz="-5.8783046359073E-22"
+        iyy="0.000401687489072672"
+        iyz="-5.64688631502867E-22"
+        izz="0.000387926888189722" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="right_leg_roll_Link">
+    <inertial>
+      <origin
+        xyz="0 -0.0343882814721337 -0.00365092546924107"
+        rpy="0 0 0" />
+      <mass
+        value="0.0958539816339745" />
+      <inertia
+        ixx="6.76561488841726E-05"
+        ixy="-4.27999060464395E-21"
+        ixz="1.42013430926026E-21"
+        iyy="2.44633865133999E-05"
+        iyz="9.5010432554639E-06"
+        izz="6.8315310165269E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_leg_roll_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_leg_roll_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_roll_joint"
+    type="revolute">
+    <origin
+      xyz="-0.075 0.01 0.02"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_leg_roll_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.0472"
+      upper="1.0472"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="right_leg_up_Link">
+    <inertial>
+      <origin
+        xyz="-2.78088081091326E-18 -0.0406333802740563 -0.000999476375001279"
+        rpy="0 0 0" />
+      <mass
+        value="0.101424777960769" />
+      <inertia
+        ixx="0.000101658230868455"
+        ixy="-8.52018341807624E-22"
+        ixz="-2.63369435463794E-21"
+        iyy="3.92969574159278E-05"
+        iyz="2.22437050340483E-05"
+        izz="8.93686110005621E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_leg_up_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_leg_up_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_up_joint"
+    type="revolute">
+    <origin
+      xyz="-0.02 -0.05 0"
+      rpy="0 1.5707963267949 0" />
+    <parent
+      link="right_leg_roll_Link" />
+    <child
+      link="right_leg_up_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.3963"
+      upper="1.3963"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="right_leg_outside_Link">
+    <inertial>
+      <origin
+        xyz="1.38777878078145E-17 -0.0236302719282104 0.0850270988548299"
+        rpy="0 0 0" />
+      <mass
+        value="0.186924777960769" />
+      <inertia
+        ixx="0.000689016168211723"
+        ixy="7.09830600086657E-21"
+        ixz="-5.60623137914235E-20"
+        iyy="0.000676838006107438"
+        iyz="2.10896770999784E-05"
+        izz="5.84004148512852E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_leg_outside_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_leg_outside_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_outside_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.075 0.02"
+      rpy="1.5707963267949 1.5707963267949 0" />
+    <parent
+      link="right_leg_up_Link" />
+    <child
+      link="right_leg_outside_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.0472"
+      upper="1.0472"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="right_knee_Link">
+    <inertial>
+      <origin
+        xyz="3.85194786622424E-18 -0.014021417086689 -0.00123560097851118"
+        rpy="0 0 0" />
+      <mass
+        value="0.035819689898686" />
+      <inertia
+        ixx="1.22178125265935E-05"
+        ixy="1.78600733558588E-22"
+        ixz="4.44834863912451E-22"
+        iyy="9.74610641812505E-06"
+        iyz="2.66174982979266E-06"
+        izz="7.95756057925976E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_knee_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_knee_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_knee_joint"
+    type="revolute">
+    <origin
+      xyz="0.01 0 0.170317541634481"
+      rpy="-1.5707963267949 0 1.5707963267949" />
+    <parent
+      link="right_leg_outside_Link" />
+    <child
+      link="right_knee_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.2217"
+      upper="1.2217"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="right_lowerleg_Link">
+    <inertial>
+      <origin
+        xyz="0 -0.0262440872322027 0.0958178467894735"
+        rpy="0 0 0" />
+      <mass
+        value="0.201424777960769" />
+      <inertia
+        ixx="0.000951940218050455"
+        ixy="1.47208837290136E-20"
+        ixz="4.31746506147168E-20"
+        iyy="0.00095132821890877"
+        iyz="6.49241099173494E-05"
+        izz="5.42860033563879E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_lowerleg_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_lowerleg_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_lowerleg_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.0300000000000001 0.01"
+      rpy="1.5707963267949 1.5707963267949 0" />
+    <parent
+      link="right_knee_Link" />
+    <child
+      link="right_lowerleg_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.5236"
+      upper="0.5236"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="right_ankle_roll_Link">
+    <inertial>
+      <origin
+        xyz="9.44822164949954E-10 -5.1485482543967E-12 -0.0200000016797088"
+        rpy="0 0 0" />
+      <mass
+        value="0.0311688900320089" />
+      <inertia
+        ixx="7.03980652807156E-06"
+        ixy="-8.77310325016056E-10"
+        ixz="-2.85586633240353E-15"
+        iyy="6.87894187492042E-06"
+        iyz="-5.24078936964661E-13"
+        izz="5.17706678688608E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_ankle_roll_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_ankle_roll_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_ankle_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.02 0.21"
+      rpy="-1.5707963267949 0 3.14159265358979" />
+    <parent
+      link="right_lowerleg_Link" />
+    <child
+      link="right_ankle_roll_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.5236"
+      upper="0.5236"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="right_foot_Link">
+    <inertial>
+      <origin
+        xyz="-0.01340843692001 -0.0252833045149068 -0.00307751234672078"
+        rpy="0 0 0" />
+      <mass
+        value="0.0924523136847811" />
+      <inertia
+        ixx="3.741585170487E-05"
+        ixy="-1.27452786994767E-05"
+        ixz="4.2186003711936E-06"
+        iyy="5.78153378014547E-05"
+        iyz="6.21868511045983E-06"
+        izz="7.23284861235369E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_foot_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/right_foot_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_foot_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0149997773006886 8.17369546108893E-05 -0.0199999999999991"
+      rpy="0.005449157274627 1.57079631189374 0" />
+    <parent
+      link="right_ankle_roll_Link" />
+    <child
+      link="right_foot_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.87267"
+      upper="0.87267"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_leg_roll_Link">
+    <inertial>
+      <origin
+        xyz="0 -0.0343882814721337 -0.00365092546924107"
+        rpy="0 0 0" />
+      <mass
+        value="0.0958539816339745" />
+      <inertia
+        ixx="6.76561488841726E-05"
+        ixy="5.23880878695911E-21"
+        ixz="-2.70381607960038E-22"
+        iyy="2.44633865133999E-05"
+        iyz="9.5010432554639E-06"
+        izz="6.8315310165269E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_leg_roll_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_leg_roll_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0.075 0.01 0.02"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_leg_roll_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.0472"
+      upper="1.0472"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_leg_up_Link">
+    <inertial>
+      <origin
+        xyz="-2.69422051477001E-18 -0.0406333802740563 0.000999476375001293"
+        rpy="0 0 0" />
+      <mass
+        value="0.101424777960769" />
+      <inertia
+        ixx="0.000101658230868455"
+        ixy="-4.22560919796782E-21"
+        ixz="1.16365554961946E-21"
+        iyy="3.92969574159278E-05"
+        iyz="-2.22437050340483E-05"
+        izz="8.93686110005621E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_leg_up_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_leg_up_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_up_joint"
+    type="revolute">
+    <origin
+      xyz="0.02 -0.05 0"
+      rpy="0 1.5707963267949 0" />
+    <parent
+      link="left_leg_roll_Link" />
+    <child
+      link="left_leg_up_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.3963"
+      upper="1.3963"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_leg_outside_Link">
+    <inertial>
+      <origin
+        xyz="-1.38777878078145E-17 -0.0236302719282104 0.0850270988548299"
+        rpy="0 0 0" />
+      <mass
+        value="0.186924777960769" />
+      <inertia
+        ixx="0.000689016168211723"
+        ixy="-1.19773544814471E-20"
+        ixz="6.94056957893818E-20"
+        iyy="0.000676838006107438"
+        iyz="2.10896770999784E-05"
+        izz="5.84004148512852E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_leg_outside_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_leg_outside_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_outside_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.075 -0.02"
+      rpy="1.5707963267949 1.5707963267949 0" />
+    <parent
+      link="left_leg_up_Link" />
+    <child
+      link="left_leg_outside_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.047198"
+      upper="1.047198"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_knee_Link">
+    <inertial>
+      <origin
+        xyz="2.47407737484954E-18 -0.014021417086689 0.00123560097851115"
+        rpy="0 0 0" />
+      <mass
+        value="0.0358196898986861" />
+      <inertia
+        ixx="1.22178125265935E-05"
+        ixy="5.23072256344449E-22"
+        ixz="-2.37132090528996E-22"
+        iyy="9.74610641812506E-06"
+        iyz="-2.66174982979265E-06"
+        izz="7.95756057925976E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_knee_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_knee_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_knee_joint"
+    type="revolute">
+    <origin
+      xyz="-0.01 0 0.170317541634481"
+      rpy="-1.5707963267949 0 1.5707963267949" />
+    <parent
+      link="left_leg_outside_Link" />
+    <child
+      link="left_knee_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.2217"
+      upper="1.2217"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_lowerleg_Link">
+    <inertial>
+      <origin
+        xyz="0 -0.0262440872322027 0.0958178467894735"
+        rpy="0 0 0" />
+      <mass
+        value="0.201424777960769" />
+      <inertia
+        ixx="0.000951940218050455"
+        ixy="-6.21951101794581E-21"
+        ixz="-2.75687151593528E-20"
+        iyy="0.000951328218908769"
+        iyz="6.49241099173494E-05"
+        izz="5.42860033563878E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_lowerleg_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_lowerleg_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_lowerleg_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.0300000000000001 -0.01"
+      rpy="1.5707963267949 1.5707963267949 0" />
+    <parent
+      link="left_knee_Link" />
+    <child
+      link="left_lowerleg_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.5236"
+      upper="0.5236"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_ankle_roll_Link">
+    <inertial>
+      <origin
+        xyz="-9.44822164949954E-10 -5.1485482543967E-12 -0.0200000016797088"
+        rpy="0 0 0" />
+      <mass
+        value="0.0311688900320089" />
+      <inertia
+        ixx="7.03980654330236E-06"
+        ixy="8.7591284341309E-10"
+        ixz="-2.85576748729036E-15"
+        iyy="6.87894185968962E-06"
+        iyz="5.24078937568661E-13"
+        izz="5.17706678688608E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_ankle_roll_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_ankle_roll_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_ankle_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.02 0.21"
+      rpy="-1.5707963267949 0 3.14159265358979" />
+    <parent
+      link="left_lowerleg_Link" />
+    <child
+      link="left_ankle_roll_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.5236"
+      upper="0.5236"
+      effort="100"
+      velocity="1" />
+  </joint>
+  <link
+    name="left_foot_Link">
+    <inertial>
+      <origin
+        xyz="-0.01340843692001 -0.0252833045149068 0.00307751234672078"
+        rpy="0 0 0" />
+      <mass
+        value="0.0924523136847812" />
+      <inertia
+        ixx="3.741585170487E-05"
+        ixy="-1.27452786994767E-05"
+        ixz="-4.21860037119361E-06"
+        iyy="5.78153378014548E-05"
+        iyz="-6.21868511045983E-06"
+        izz="7.23284861235369E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_foot_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_structure_real_size/meshes/left_foot_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_foot_joint"
+    type="revolute">
+    <origin
+      xyz="0.0149997773006886 8.17369546110003E-05 -0.02"
+      rpy="3.13614349631517 1.57079631189374 3.14159265358979" />
+    <parent
+      link="left_ankle_roll_Link" />
+    <child
+      link="left_foot_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.87267"
+      upper="0.87267"
+      effort="100"
+      velocity="1" />
+  </joint>
+</robot>

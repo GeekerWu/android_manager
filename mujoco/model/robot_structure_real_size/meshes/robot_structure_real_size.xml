@@ -1,0 +1,173 @@
+<mujoco model="robot_structure_real_size">
+  <!-- <compiler angle="radian"/> -->
+  <compiler angle="radian" autolimits="true" eulerseq="zyx"/>
+
+  <asset>
+    <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4"/>
+    <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2"/>
+
+    <mesh name="base_link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\base_link.STL"/>
+    <mesh name="right_leg_roll_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_leg_roll_Link.STL"/>
+    <mesh name="right_leg_up_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_leg_up_Link.STL"/>
+    <mesh name="right_leg_outside_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_leg_outside_Link.STL"/>
+    <mesh name="right_knee_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_knee_Link.STL"/>
+    <mesh name="right_lowerleg_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_lowerleg_Link.STL"/>
+    <mesh name="right_ankle_roll_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_ankle_roll_Link.STL"/>
+    <mesh name="right_foot_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\right_foot_Link.STL"/>
+    <mesh name="left_leg_roll_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_leg_roll_Link.STL"/>
+    <mesh name="left_leg_up_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_leg_up_Link.STL"/>
+    <mesh name="left_leg_outside_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_leg_outside_Link.STL"/>
+    <mesh name="left_knee_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_knee_Link.STL"/>
+    <mesh name="left_lowerleg_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_lowerleg_Link.STL"/>
+    <mesh name="left_ankle_roll_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_ankle_roll_Link.STL"/>
+    <mesh name="left_foot_Link" content_type="model/stl" file="D:\android_manager\mujoco\model\robot_structure_real_size\meshes\left_foot_Link.STL"/>
+  </asset>
+
+  <worldbody>
+    <!-- customize start -->
+    <geom type="plane" size="3 3 .01" material="grid"/>  
+    <!-- customize end -->
+    <body name="base_link" pos="0 0 0.64">
+
+      <!-- customize start -->
+      <!-- <freejoint/> -->
+      <light name="top light" pos="0 0 2" mode="trackcom" diffuse=".4 .4 .4"/>
+      <!-- customize end -->
+      
+
+      <inertial pos="0 0 0.02" quat="0.5 0.5 0.5 0.5" mass="0.141991" diaginertia="0.000401687 0.000387927 2.32267e-05"/>
+      <joint name="floating_base_joint" type="free"/>
+      <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="base_link"/>
+      <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="base_link"/>
+      <body name="right_leg_roll_Link" pos="-0.075 0.01 0.02" quat="0.707107 0.707107 0 0">
+        <inertial pos="0 -0.0343883 -0.00365093" quat="0.548413 0.446366 -0.446366 0.548413" mass="0.095854" diaginertia="7.02853e-05 6.76561e-05 2.24934e-05"/>
+        <joint name="right_leg_roll_joint" range="-1.0472 1.0472" actuatorfrcrange="-100 100"/>
+        <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_leg_roll_Link"/>
+        <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_leg_roll_Link"/>
+        <body name="right_leg_up_Link" pos="-0.02 -0.05 0" quat="0.707107 0 0.707107 0">
+          <inertial pos="0 -0.0406334 -0.000999476" quat="0.823187 0.567771 0 0" mass="0.101425" diaginertia="0.000101658 9.78227e-05 3.08429e-05"/>
+          <joint name="right_leg_up_joint" range="-1.3963 1.3963" actuatorfrcrange="-100 100" axis="0 0 -1"/>
+          <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_leg_up_Link"/>
+          <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_leg_up_Link"/>
+          <body name="right_leg_outside_Link" pos="0 -0.075 0.02" quat="0.5 0.5 0.5 -0.5">
+            <inertial pos="0 -0.0236303 0.0850271" quat="0.999855 0.0170236 0 0" mass="0.186925" diaginertia="0.000689016 0.000677556 5.76821e-05"/>
+            <joint name="right_leg_outside_joint" range="-1.0472 1.0472" actuatorfrcrange="-100 100"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_leg_outside_Link"/>
+            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_leg_outside_Link"/>
+            <body name="right_knee_Link" pos="0.01 0 0.170318" quat="0.5 -0.5 -0.5 0.5">
+              <inertial pos="0 -0.0140214 -0.0012356" quat="0.951823 0.306647 0 0" mass="0.0358197" diaginertia="1.22178e-05 1.16598e-05 6.04387e-06"/>
+              <joint name="right_knee_joint" range="-1.2217 1.2217" actuatorfrcrange="-100 100" axis="0 0 -1"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_knee_Link"/>
+              <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_knee_Link"/>
+              <body name="right_lowerleg_Link" pos="0 -0.03 0.01" quat="0.5 0.5 0.5 -0.5">
+                <inertial pos="0 -0.0262441 0.0958178" quat="0.70665 0.0254067 -0.0254067 0.70665" mass="0.201425" diaginertia="0.000956003 0.00095194 4.96114e-05"/>
+                <joint name="right_lowerleg_joint" range="-0.5236 0.5236" actuatorfrcrange="-100 100"/>
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_lowerleg_Link"/>
+                <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_lowerleg_Link"/>
+                <body name="right_ankle_roll_Link" pos="0 -0.02 0.21" quat="0 0 -0.707107 0.707107">
+                  <inertial pos="9.44822e-10 -5.14855e-12 -0.02" quat="0.999996 -1.53973e-07 4.1925e-10 -0.00272675" mass="0.0311689" diaginertia="7.03981e-06 6.87894e-06 5.17707e-06"/>
+                  <joint name="right_ankle_roll_joint" range="-0.5236 0.5236" actuatorfrcrange="-100 100" axis="0 0 -1"/>
+                  <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_ankle_roll_Link"/>
+                  <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_ankle_roll_Link"/>
+                  <body name="right_foot_Link" pos="-0.0149998 8.1737e-05 -0.02" quat="0.707104 0.00192657 0.707104 -0.00192657">
+                    <inertial pos="-0.0134084 -0.0252833 -0.00307751" quat="-0.0429082 0.69986 0.295424 0.648906" mass="0.0924523" diaginertia="7.46363e-05 6.26455e-05 3.02778e-05"/>
+                    <joint name="right_foot_joint" range="-0.87267 0.87267" actuatorfrcrange="-100 100" axis="0 0 -1"/>
+                    <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="right_foot_Link"/>
+                    <geom pos="0 0 0" quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_foot_Link"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="left_leg_roll_Link" pos="0.075 0.01 0.02" quat="0.707107 0.707107 0 0">
+        <inertial pos="0 -0.0343883 -0.00365093" quat="0.548413 0.446366 -0.446366 0.548413" mass="0.095854" diaginertia="7.02853e-05 6.76561e-05 2.24934e-05"/>
+        <joint name="left_leg_roll_joint" range="-1.0472 1.0472" actuatorfrcrange="-100 100"/>
+        <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_leg_roll_Link"/>
+        <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_roll_Link"/>
+        <body name="left_leg_up_Link" pos="0.02 -0.05 0" quat="0.707107 0 0.707107 0">
+          <inertial pos="0 -0.0406334 0.000999476" quat="0.567771 0.823187 0 0" mass="0.101425" diaginertia="0.000101658 9.78227e-05 3.08429e-05"/>
+          <joint name="left_leg_up_joint" range="-1.3963 1.3963" actuatorfrcrange="-100 100"/>
+          <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_leg_up_Link"/>
+          <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_up_Link"/>
+          <body name="left_leg_outside_Link" pos="0 -0.075 -0.02" quat="0.5 0.5 0.5 -0.5">
+            <inertial pos="0 -0.0236303 0.0850271" quat="0.999855 0.0170236 0 0" mass="0.186925" diaginertia="0.000689016 0.000677556 5.76821e-05"/>
+            <joint name="left_leg_outside_joint" range="-1.0472 1.0472" actuatorfrcrange="-100 100"/>
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_leg_outside_Link"/>
+            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_outside_Link"/>
+            <body name="left_knee_Link" pos="-0.01 0 0.170318" quat="0.5 -0.5 -0.5 0.5">
+              <inertial pos="0 -0.0140214 0.0012356" quat="0.951823 -0.306647 0 0" mass="0.0358197" diaginertia="1.22178e-05 1.16598e-05 6.04387e-06"/>
+              <joint name="left_knee_joint" range="-1.2217 1.2217" actuatorfrcrange="-100 100"/>
+              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_knee_Link"/>
+              <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_knee_Link"/>
+              <body name="left_lowerleg_Link" pos="0 -0.03 -0.01" quat="0.5 0.5 0.5 -0.5">
+                <inertial pos="0 -0.0262441 0.0958178" quat="0.70665 0.0254067 -0.0254067 0.70665" mass="0.201425" diaginertia="0.000956003 0.00095194 4.96114e-05"/>
+                <joint name="left_lowerleg_joint" range="-0.5236 0.5236" actuatorfrcrange="-100 100"/>
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_lowerleg_Link"/>
+                <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_lowerleg_Link"/>
+                <body name="left_ankle_roll_Link" pos="0 -0.02 0.21" quat="0 0 -0.707107 0.707107">
+                  <inertial pos="-9.44822e-10 -5.14855e-12 -0.02" quat="0.999996 1.53973e-07 4.19776e-10 0.0027224" mass="0.0311689" diaginertia="7.03981e-06 6.87894e-06 5.17707e-06"/>
+                  <joint name="left_ankle_roll_joint" range="-0.5236 0.5236" actuatorfrcrange="-100 100" axis="0 0 -1"/>
+                  <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_ankle_roll_Link"/>
+                  <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_ankle_roll_Link"/>
+                  <body name="left_foot_Link" pos="0.0149998 8.1737e-05 -0.02" quat="0.707104 -0.00192657 0.707104 0.00192657">
+                    <inertial pos="-0.0134084 -0.0252833 0.00307751" quat="-0.295424 0.648906 0.0429082 0.69986" mass="0.0924523" diaginertia="7.46363e-05 6.26455e-05 3.02778e-05"/>
+                    <joint name="left_foot_joint" range="-0.87267 0.87267" actuatorfrcrange="-100 100"/>
+                    <geom quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" density="0" mesh="left_foot_Link"/>
+                    <geom quat="1 0 0 0" type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_foot_Link"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+   <!-- customize start -->
+    <tendon>
+      <!-- 基础结构保留，后续如需特殊约束可在此定义 -->
+    </tendon>
+
+    <actuator>
+      <!-- 为所有 14 个关节建立独立的电机驱动 -->
+      <motor name="right_leg_roll" joint="right_leg_roll_joint" ctrlrange="-1 1"/>
+      <motor name="right_leg_up" joint="right_leg_up_joint" ctrlrange="-1 1"/>
+      <motor name="right_leg_outside" joint="right_leg_outside_joint" ctrlrange="-1 1"/>
+      <motor name="right_knee" joint="right_knee_joint" ctrlrange="-1 1"/>
+      <motor name="right_lowerleg" joint="right_lowerleg_joint" ctrlrange="-1 1"/>
+      <motor name="right_ankle_roll" joint="right_ankle_roll_joint" ctrlrange="-1 1"/>
+      <motor name="right_foot" joint="right_foot_joint" ctrlrange="-1 1"/>
+
+      <motor name="left_leg_roll" joint="left_leg_roll_joint" ctrlrange="-1 1"/>
+      <motor name="left_leg_up" joint="left_leg_up_joint" ctrlrange="-1 1"/>
+      <motor name="left_leg_outside" joint="left_leg_outside_joint" ctrlrange="-1 1"/>
+      <motor name="left_knee" joint="left_knee_joint" ctrlrange="-1 1"/>
+      <motor name="left_lowerleg" joint="left_lowerleg_joint" ctrlrange="-1 1"/>
+      <motor name="left_ankle_roll" joint="left_ankle_roll_joint" ctrlrange="-1 1"/>
+      <motor name="left_foot" joint="left_foot_joint" ctrlrange="-1 1"/>
+    </actuator>
+
+    <sensor>
+      <!-- 为所有 14 个关节建立独立的力/位置传感器反馈 -->
+      <jointactuatorfrc name="right_leg_roll" joint="right_leg_roll_joint"/>
+      <jointactuatorfrc name="right_leg_up" joint="right_leg_up_joint"/>
+      <jointactuatorfrc name="right_leg_outside" joint="right_leg_outside_joint"/>
+      <jointactuatorfrc name="right_knee" joint="right_knee_joint"/>
+      <jointactuatorfrc name="right_lowerleg" joint="right_lowerleg_joint"/>
+      <jointactuatorfrc name="right_ankle_roll" joint="right_ankle_roll_joint"/>
+      <jointactuatorfrc name="right_foot" joint="right_foot_joint"/>
+
+      <jointactuatorfrc name="left_leg_roll" joint="left_leg_roll_joint"/>
+      <jointactuatorfrc name="left_leg_up" joint="left_leg_up_joint"/>
+      <jointactuatorfrc name="left_leg_outside" joint="left_leg_outside_joint"/>
+      <jointactuatorfrc name="left_knee" joint="left_knee_joint"/>
+      <jointactuatorfrc name="left_lowerleg" joint="left_lowerleg_joint"/>
+      <jointactuatorfrc name="left_ankle_roll" joint="left_ankle_roll_joint"/>
+      <jointactuatorfrc name="left_foot" joint="left_foot_joint"/>
+    </sensor>
+  <!-- customize end -->
+
+</mujoco>

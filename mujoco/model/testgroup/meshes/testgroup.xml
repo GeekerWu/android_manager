@@ -1,0 +1,23 @@
+<mujoco model="testgroup">
+  <compiler angle="radian"/>
+
+  <asset>
+    <mesh name="base_link" content_type="model/stl" file="base_link.STL"/>
+    <mesh name="roller1_link" content_type="model/stl" file="roller1_link.STL"/>
+  </asset>
+
+  <worldbody>
+    <body name="base_link">
+      <inertial pos="-0.056985 0.2 0" quat="0 0.707107 0 0.707107" mass="32.861" diaginertia="1.6772 1.2479 0.48412"/>
+      <joint name="floating_base_joint" type="free"/>
+      <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="base_link"/>
+      <geom pos="0 0 0" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="base_link"/>
+      <body name="roller1_link" pos="-0.25 0.2 0.05">
+        <inertial pos="-0.16993 -0.0023717 0.05" quat="-0.00493435 0.70709 0.00493435 0.70709" mass="37.322" diaginertia="1.8459 1.40908 0.498993"/>
+        <joint name="roller1_joint" range="-1 1" actuatorfrcrange="-100 100"/>
+        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" density="0" mesh="roller1_link"/>
+        <geom pos="0 0 0" quat="1 0 0 0" type="mesh" rgba="1 1 1 1" mesh="roller1_link"/>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>
